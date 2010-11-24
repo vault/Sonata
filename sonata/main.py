@@ -29,13 +29,13 @@ import gobject, gtk, pango
 
 # Prevent deprecation warning for egg:
 warnings.simplefilter('ignore', DeprecationWarning)
-try:
-    import egg.trayicon
-    HAVE_EGG = True
-    HAVE_STATUS_ICON = False
-except ImportError:
-    HAVE_EGG = False
-    HAVE_STATUS_ICON = True
+#try:
+    #import egg.trayicon
+    #HAVE_EGG = True
+    #HAVE_STATUS_ICON = False
+#except ImportError:
+HAVE_EGG = False
+HAVE_STATUS_ICON = True
 # Reset so that we can see any other deprecation warnings
 warnings.simplefilter('default', DeprecationWarning)
 
@@ -203,7 +203,7 @@ class Base(object):
             activity_root = activity.get_bundle_path()
             icon_theme.append_search_path(os.path.join(activity_root, 'share'))
         img_width, _img_height = gtk.icon_size_lookup(VOLUME_ICON_SIZE)
-        for iconname in ('stock_volume-mute', 'stock_volume-min', 'stock_volume-med', 'stock_volume-max'):
+        for iconname in ('stock_volume-mute', 'stock_volume-min', 'stock_volume-med', 'stock_volume-max', 'sonata', 'sonata_play', 'sonata_pause', 'sonata_disconnect'):
             try:
                 ui.icon(self.iconfactory, iconname, icon_theme.lookup_icon(iconname, img_width, gtk.ICON_LOOKUP_USE_BUILTIN).get_filename())
             except:
@@ -1137,7 +1137,8 @@ class Base(object):
             if self.current_treeview.get_model():
                 self.current_treeview.get_model().clear()
             if HAVE_STATUS_ICON:
-                self.statusicon.set_from_file(self.find_path('sonata_disconnect.png'))
+                #self.statusicon.set_from_file(self.find_path('sonata_disconnect.png'))
+                self.statusicon.set_from_stock('sonata_disconnect')
             elif HAVE_EGG and self.eggtrayheight:
                 self.eggtrayfile = self.find_path('sonata_disconnect.png')
                 self.trayimage.set_from_pixbuf(img.get_pixbuf_of_size(gtk.gdk.pixbuf_new_from_file(self.eggtrayfile), self.eggtrayheight)[0])
@@ -1439,7 +1440,8 @@ class Base(object):
                 self.UIManager.get_widget('/traymenu/playmenu').show()
                 self.UIManager.get_widget('/traymenu/pausemenu').hide()
                 if HAVE_STATUS_ICON:
-                    self.statusicon.set_from_file(self.find_path('sonata_pause.png'))
+                    #self.statusicon.set_from_file(self.find_path('sonata_pause.png'))
+                    self.statusicon.set_from_stock('sonata_pause')
                 elif HAVE_EGG and self.eggtrayheight:
                     self.eggtrayfile = self.find_path('sonata_pause.png')
                     self.trayimage.set_from_pixbuf(img.get_pixbuf_of_size(gtk.gdk.pixbuf_new_from_file(self.eggtrayfile), self.eggtrayheight)[0])
@@ -1453,7 +1455,8 @@ class Base(object):
                         # Forces the notification to popup if specified
                         self.on_currsong_notify()
                 if HAVE_STATUS_ICON:
-                    self.statusicon.set_from_file(self.find_path('sonata_play.png'))
+                    #self.statusicon.set_from_file(self.find_path('sonata_play.png'))
+                    self.statusicon.set_from_stock('sonata_play')
                 elif HAVE_EGG and self.eggtrayheight:
                     self.eggtrayfile = self.find_path('sonata_play.png')
                     self.trayimage.set_from_pixbuf(img.get_pixbuf_of_size(gtk.gdk.pixbuf_new_from_file(self.eggtrayfile), self.eggtrayheight)[0])
@@ -3142,7 +3145,8 @@ class Base(object):
         # Make system tray 'icon' to sit in the system tray
         if HAVE_STATUS_ICON:
             self.statusicon = gtk.StatusIcon()
-            self.statusicon.set_from_file(self.find_path('sonata.png'))
+            #self.statusicon.set_from_file(self.find_path('sonata.png'))
+            self.statusicon.set_from_stock('sonata')
             self.statusicon.set_visible(self.config.show_trayicon)
             self.statusicon.connect('popup_menu', self.systemtray_menu)
             self.statusicon.connect('activate', self.systemtray_activate)
